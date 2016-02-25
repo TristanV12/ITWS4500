@@ -202,7 +202,7 @@ th {
   *,
   *:before,
   *:after {
-    color: #000 !important;
+    color: red !important;
     text-shadow: none !important;
     background: transparent !important;
     -webkit-box-shadow: none !important;

@@ -1,0 +1,2 @@
+Everything was pretty simple for this lab. I was not sure what I was doing with the bug tracking server until I realized it should be on my local machine, then it was very easy. I wasn't sure what I needed to submit to prove I had finished everything and I hope this is enough.
+https://github.com/TristanV12/ITWS4500
