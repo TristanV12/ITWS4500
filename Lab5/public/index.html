@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="twitterApp">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Lab 5</title>
+
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.css" rel="stylesheet">
+
+    <!-- Angular -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"></script>
+
+    <!-- Socket -->
+    <script src="/socket.io/socket.io.js"></script>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+
+  
+
+  </head>
+  <body ng-controller="mainController">
+
+    <form action="" id="query-form">
+      <input id="query" autocomplete="off" />
+      <input id="count" type="number" value='0'/>
+      <button id="send">Query</button>
+    </form>
+    <ul id="messages"></ul>
+
+    <ol id="tweet_text">
+      <li ng-repeat="a in arr"> <h3><a>{{a[0]}}</a></h3> {{a[1]}}</li>
+    </ol>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <!-- <script src="js/bootstrap.min.js"></script> -->
+
+    <script>
+      var twitterApp = angular.module('twitterApp',[]);
+      var socket = io();
+      twitterApp.controller('mainController', ['$scope','$http', function($scope,$http) {
+
+        //variables
+        var itr = 0;
+        var string;
+        $scope.arr = [];
+    
+        // on chat form submit, send query to server
+        $('#query-form').submit(function(){
+          
+          // append and emit message
+          socket.emit('query', [$('#query').val(), $('#count').val()]);
+          $('#query').val('');
+          $('#count').val(0);
+          $('#tweet_text').html('');
+          
+          return false;
+        });
+
+        socket.on('tweet', function(tweet){
+          var tt = $('#tweet_text').html();
+          $('#tweet_text').html(tt + "<li><h3><a>" + tweet["user"]["name"] + "</a></h3>" + tweet["text"] + "</li>");
+        });
+
+
+/*        twitter.get('favorites/list', function(error, tweets, response){
+          if(error) throw error;
+          console.log(tweets);  // The favorites. 
+          console.log(response);  // Raw response object. 
+        });*/
+        
+        //request tweets
+/*        $http.get("get_tweets.php").then(function successCallback(response) {
+            // this callback will be called asynchronously
+            // when the response is available
+            $.each(response, function( key, val ) {
+              //go through all statuses
+              while('undefined' != typeof(val["statuses"]) && 'undefined' != typeof(val["statuses"][itr])){
+                $scope.arr.push([]);
+                $scope.arr[itr].push(val["statuses"][itr]["user"]["name"]);
+                $scope.arr[itr].push(val["statuses"][itr]["text"]);
+                ++itr;
+              }
+            });
+
+          }, function errorCallback(response) {
+            alert("no");
+            // called asynchronously if an error occurs
+            // or server returns response with an error status.
+        });*/
+      }]);
+    </script>
+
+
+  </body>
+</html>
