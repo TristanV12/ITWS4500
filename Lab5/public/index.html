@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="twitterApp">
+<html lang="en">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -8,10 +8,7 @@
     <title>Lab 5</title>
 
     <!-- Bootstrap -->
-    <link href="css/bootstrap.css" rel="stylesheet">
-
-    <!-- Angular -->
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"></script>
+    <link href="style.css" rel="stylesheet">
 
     <!-- Socket -->
     <script src="/socket.io/socket.io.js"></script>
@@ -27,10 +24,10 @@
   
 
   </head>
-  <body ng-controller="mainController">
+  <body>
 
     <form action="" id="query-form">
-      <input id="query" autocomplete="off" />
+      <input id="query" autocomplete="off" value=''/>
       <input id="count" type="number" value='0'/>
       <button id="send">Query</button>
     </form>
@@ -48,57 +45,22 @@
     <script>
       var twitterApp = angular.module('twitterApp',[]);
       var socket = io();
-      twitterApp.controller('mainController', ['$scope','$http', function($scope,$http) {
-
-        //variables
-        var itr = 0;
-        var string;
-        $scope.arr = [];
-    
-        // on chat form submit, send query to server
-        $('#query-form').submit(function(){
-          
-          // append and emit message
-          socket.emit('query', [$('#query').val(), $('#count').val()]);
-          $('#query').val('');
-          $('#count').val(0);
-          $('#tweet_text').html('');
-          
-          return false;
-        });
-
-        socket.on('tweet', function(tweet){
-          var tt = $('#tweet_text').html();
-          $('#tweet_text').html(tt + "<li><h3><a>" + tweet["user"]["name"] + "</a></h3>" + tweet["text"] + "</li>");
-        });
-
-
-/*        twitter.get('favorites/list', function(error, tweets, response){
-          if(error) throw error;
-          console.log(tweets);  // The favorites. 
-          console.log(response);  // Raw response object. 
-        });*/
+      // on chat form submit, send query to server
+      $('#query-form').submit(function(){
         
-        //request tweets
-/*        $http.get("get_tweets.php").then(function successCallback(response) {
-            // this callback will be called asynchronously
-            // when the response is available
-            $.each(response, function( key, val ) {
-              //go through all statuses
-              while('undefined' != typeof(val["statuses"]) && 'undefined' != typeof(val["statuses"][itr])){
-                $scope.arr.push([]);
-                $scope.arr[itr].push(val["statuses"][itr]["user"]["name"]);
-                $scope.arr[itr].push(val["statuses"][itr]["text"]);
-                ++itr;
-              }
-            });
+        // append and emit message
+        socket.emit('query', [$('#query').val(), $('#count').val()]);
+        $('#query').val('');
+        $('#count').val(0);
+        $('#tweet_text').html('');
+        
+        return false;
+      });
 
-          }, function errorCallback(response) {
-            alert("no");
-            // called asynchronously if an error occurs
-            // or server returns response with an error status.
-        });*/
-      }]);
+      socket.on('tweet', function(tweet){
+        var tt = $('#tweet_text').html();
+        $('#tweet_text').html(tt + "<li><h3><a>" + tweet["user"]["name"] + "</a></h3>" + tweet["text"] + "</li>");
+      });
     </script>
 
 
