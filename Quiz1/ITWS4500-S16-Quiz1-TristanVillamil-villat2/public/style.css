@@ -1,0 +1,11 @@
+#send {
+  font-weight: bold;
+  text-align: center;
+  color: white;
+  width: 10%;
+  background: #493736;
+  border: solid #2A2829 2px;
+  margin: .5%;
+  border-radius: 10%;
+  padding: 20px;
+}

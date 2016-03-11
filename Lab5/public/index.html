@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="twitterApp">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -9,6 +9,9 @@
 
     <!-- Bootstrap -->
     <link href="style.css" rel="stylesheet">
+
+    <!-- Angular -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"></script>
 
     <!-- Socket -->
     <script src="/socket.io/socket.io.js"></script>
@@ -24,7 +27,7 @@
   
 
   </head>
-  <body>
+  <body ng-controller="mainController">
 
     <form action="" id="query-form">
       <input id="query" autocomplete="off" value=''/>
@@ -45,22 +48,29 @@
     <script>
       var twitterApp = angular.module('twitterApp',[]);
       var socket = io();
-      // on chat form submit, send query to server
-      $('#query-form').submit(function(){
-        
-        // append and emit message
-        socket.emit('query', [$('#query').val(), $('#count').val()]);
-        $('#query').val('');
-        $('#count').val(0);
-        $('#tweet_text').html('');
-        
-        return false;
-      });
+      twitterApp.controller('mainController', ['$scope','$http', function($scope,$http) {
 
-      socket.on('tweet', function(tweet){
-        var tt = $('#tweet_text').html();
-        $('#tweet_text').html(tt + "<li><h3><a>" + tweet["user"]["name"] + "</a></h3>" + tweet["text"] + "</li>");
-      });
+        //variables
+        var itr = 0;
+        var string;
+    
+        // on chat form submit, send query to server
+        $('#query-form').submit(function(){
+          
+          // append and emit message
+          socket.emit('query', [$('#query').val(), $('#count').val()]);
+          $('#query').val('');
+          $('#count').val(0);
+          $('#tweet_text').html('');
+          
+          return false;
+        });
+
+        socket.on('tweet', function(tweet){
+          var tt = $('#tweet_text').html();
+          $('#tweet_text').html(tt + "<li><h3><a>" + tweet["user"]["name"] + "</a></h3>" + tweet["text"] + "</li>");
+        });
+      }]);
     </script>
 
 

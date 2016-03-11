@@ -34,6 +34,7 @@ io.on('connection', function(socket){
   
   // message received event handler
   socket.on('query', function(query){
+    console.log("hi");
 
     //variables
     var count = 0;
